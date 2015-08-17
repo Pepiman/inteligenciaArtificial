@@ -40,6 +40,34 @@ class Termita:
 
 	def moverTermita(self):
 		direcciones = np.array([7,0,1,2,3,4,5,6,7,0])
+
+		opciones = direcciones[np.array([self.direccion,self.direccion+1,self.direccion+2])]
+
+		paso_aleatorio = opciones[int(randint(0,2))]
+
+		if paso_aleatorio == 0:
+			self.posX = self.posX-1
+			self.posY = self.posY+1
+		elif paso_aleatorio == 1:
+			self.posY = self.posY+1
+		elif paso_aleatorio == 2:
+			self.posX = self.posX+1
+			self.posY = self.posY+1
+		elif paso_aleatorio == 3:
+			self.posX = self.posX+1
+		elif paso_aleatorio == 4:
+			self.posX = self.posX+1
+			self.posY = self.posY-1
+		elif paso_aleatorio == 5:
+			self.posY = self.posY-1
+		elif paso_aleatorio == 6:
+			self.posX = self.posX-1
+			self.posY = self.posY-1
+		elif paso_aleatorio == 7:
+			self.posX = self.posX-1
+
+			
+
 		
 		'''
 		Constructor de una termita
@@ -85,12 +113,20 @@ termitas = crearTermitas(20,grid)
 
 print(termitas[0].posX)
 
+termi = termitas[0]
+print(termi.posX)
+print(termi.posY)
+termi.Termita.moverTermita()
+print(termi.posX)
+print(termi.posY)
+
+
 # set up animation
-fig, ax = plt.subplots()
-mat = ax.matshow(grid)
-ani = animation.FuncAnimation(fig, update, interval=50,
-                              save_count=50)
-plt.show()
+#fig, ax = plt.subplots()
+#mat = ax.matshow(grid)
+#ani = animation.FuncAnimation(fig, update, interval=50,
+#                              save_count=50)
+#plt.show()
 
 
 
