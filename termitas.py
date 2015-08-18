@@ -51,44 +51,41 @@ class Termita:
 		logro_moverse=False
 
 		if paso_aleatorio == 0:
-			if (self.posX-1 > 0) & (self.posY+1 < np.shape(mundo)[1]):
-				self.posX = self.posX-1
-				self.posY = self.posY+1
-				logro_moverse=True
+			paso_x = -1
+			paso_y = 1
 		elif paso_aleatorio == 1:
-			if self.posY+1 < np.shape(mundo)[1]:
-				self.posY = self.posY+1
-				logro_moverse=True
+			paso_x = 0
+			paso_y = 1
 		elif paso_aleatorio == 2:
-			if (self.posX+1 < np.shape(mundo[0])) & (self.posY+1 < np.shape(mundo)[1]):
-				self.posX = self.posX+1
-				self.posY = self.posY+1
-				logro_moverse = True
+			paso_x = 1
+			paso_y = 1
 		elif paso_aleatorio == 3:
-			if self.posX+1 < np.shape(mundo)[0]:
-				self.posX = self.posX+1
-				logro_moverse=True
+			paso_x = 1
+			paso_y = 0
 		elif paso_aleatorio == 4:
-			if (self.posX+1 < np.shape(mundo)[0]) & (self.posY-1 > 0):
-				self.posX = self.posX+1
-				self.posY = self.posY-1
-				logro_moverse=True
+			paso_x = 1
+			paso_y = -1
 		elif paso_aleatorio == 5:
-			if self.posY-1 > 0:
-				self.posY = self.posY-1
-				logro_moverse=True
+			paso_x = 0
+			paso_y = -1
 		elif paso_aleatorio == 6:
-			if (self.posX-1 > 0) & (self.posY-1 > 0):
-				self.posX = self.posX-1
-				self.posY = self.posY-1
-				logro_moverse=True
+			paso_x = -1
+			paso_y = -1
 		elif paso_aleatorio == 7:
-			if self.posX-1 > 0:
-				self.posX = self.posX-1
-				logro_moverse=True
+			paso_x = -1
+			paso_y = 0
 
-		if logro_moverse == False:
+		if self.movimiento_valido(paso_x, paso_y):
+			self.mover_termita(paso_x, paso_y)
+		else:
 			self.aleatorizarDireccion()
+
+	def mover_termita(self, x, y):
+		self.posX = self.posX + x
+		self.posY = self.posY + y
+
+	def movimiento_valido(self, x, y):
+		return (self.posX + x > 0) and (self.posY + y > 0) and (self.posX + x < ancho) and (self.posY + y < alto)
 
 	def recogerAstilla(self,mundo):
 		tiroAstilla = False
