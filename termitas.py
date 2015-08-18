@@ -93,8 +93,15 @@ class Termita:
 
 
 	def recogerAstilla(self,mundo):
+		tiroAstilla = False
+		direcciones_contrarias = np.array([4,5,6,7,0,1,2,3])
 		if (mundo[self.posX,self.posY]==1) & (self.cargando == False):
 			self.cargando=True
+		elif (mundo[self.posX,self.posY]==1) & (self.cargando == True):
+			self.direccion = direcciones_contrarias[self.direccion]
+			self.moverTermita(mundo)
+			tiroAstilla = True
+		return(tiroAstilla)
 
 	
 		'''
@@ -143,7 +150,8 @@ print(termi.posY)
 termi.moverTermita(grid)
 print(termi.posX)
 print(termi.posY)
-
+tiroAstilla=termi.recogerAstilla(grid)
+print(tiroAstilla)
 
 # set up animation
 #fig, ax = plt.subplots()
