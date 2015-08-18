@@ -38,37 +38,65 @@ class Termita:
 		self.direccion = direccion
 		self.cargando = False
 
-	def moverTermita(self):
+	def aleatorizarDireccion(self):
+		self.direccion = randint(0,7)
+
+	def moverTermita(self,mundo):
 		direcciones = np.array([7,0,1,2,3,4,5,6,7,0])
 
 		opciones = direcciones[np.array([self.direccion,self.direccion+1,self.direccion+2])]
 
-		paso_aleatorio = opciones[int(randint(0,2))]
+		paso_aleatorio = opciones[randint(0,2)]
+
+		logro_moverse=False
 
 		if paso_aleatorio == 0:
-			self.posX = self.posX-1
-			self.posY = self.posY+1
+			if (self.posX-1 >= 0) & (self.posY+1 <= np.shape(mundo)[1]):
+				self.posX = self.posX-1
+				self.posY = self.posY+1
+				logro_moverse=True
 		elif paso_aleatorio == 1:
-			self.posY = self.posY+1
+			if self.posY+1 <= np.shape(mundo)[1]:
+				self.posY = self.posY+1
+				logro_moverse=True
 		elif paso_aleatorio == 2:
-			self.posX = self.posX+1
-			self.posY = self.posY+1
+			if (self.posX+1 <= np.shape(mundo[0])) & (self.posy+1 <= np.shape(mundo)[1]):
+				self.posX = self.posX+1
+				self.posY = self.posY+1
+				logro_moverse = True
 		elif paso_aleatorio == 3:
-			self.posX = self.posX+1
+			if self.posX+1 <= np.shape(mundo)[0]:
+				self.posX = self.posX+1
+				logro_moverse=True
 		elif paso_aleatorio == 4:
-			self.posX = self.posX+1
-			self.posY = self.posY-1
+			if (self.posX+1 <= np.shape(mundo)[0]) & (self.posY-1 >= 0):
+				self.posX = self.posX+1
+				self.posY = self.posY-1
+				logro_moverse=True
 		elif paso_aleatorio == 5:
-			self.posY = self.posY-1
+			if self.posY-1 >= 0:
+				self.posY = self.posY-1
+				logro_moverse=True
 		elif paso_aleatorio == 6:
-			self.posX = self.posX-1
-			self.posY = self.posY-1
+			if (self.posX-1 >= 0) & (self.posY-1 >= 0):
+				self.posX = self.posX-1
+				self.posY = self.posY-1
+				logro_moverse=True
 		elif paso_aleatorio == 7:
-			self.posX = self.posX-1
+			if self.posX-1 >= 0:
+				self.posX = self.posX-1
+				logro_moverse=True
 
-			
+		if logro_moverse == False:
+			self.aleatorizarDireccion()
 
-		
+
+
+	def recogerAstilla(self,mundo):
+		if (mundo[self.posX,self.posY]==1) & (self.cargando == False):
+			self.cargando=True
+
+	
 		'''
 		Constructor de una termita
         @param posX Indica su posicion en el eje X
@@ -81,9 +109,7 @@ class Termita:
            |-----------|
            | 6 | 5 | 4 |
             -----------
-      	'''
-
-
+		'''
 
 def crearTermitas(numeroTermitas,mundo):
 
@@ -111,12 +137,10 @@ def update(data):
 
 termitas = crearTermitas(20,grid)
 
-print(termitas[0].posX)
-
 termi = termitas[0]
 print(termi.posX)
 print(termi.posY)
-termi.Termita.moverTermita()
+termi.moverTermita(grid)
 print(termi.posX)
 print(termi.posY)
 
