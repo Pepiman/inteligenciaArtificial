@@ -18,7 +18,7 @@ celda = 4
 termitas = 200
 
 # Proporcion de astilla en el modelo (con probabilidad de 0 a 1).
-densidad = 0.7
+densidad = 0.8
 
 def crearMundo(alto,ancho,densidad):
 
@@ -60,7 +60,7 @@ class Termita:
 				self.posY = self.posY+1
 				logro_moverse=True
 		elif paso_aleatorio == 2:
-			if (self.posX+1 <= np.shape(mundo[0])) & (self.posY+1 <= np.shape(mundo)[1]):
+			if (self.posX+1 <= np.shape(mundo[0])) & (self.posy+1 <= np.shape(mundo)[1]):
 				self.posX = self.posX+1
 				self.posY = self.posY+1
 				logro_moverse = True
@@ -89,6 +89,8 @@ class Termita:
 
 		if logro_moverse == False:
 			self.aleatorizarDireccion()
+
+
 
 	def recogerAstilla(self,mundo):
 		tiroAstilla = False
@@ -125,46 +127,35 @@ def crearTermitas(numeroTermitas,mundo):
 	termitas = []
 
 	for i in xrange(numeroTermitas):
-		termita = Termita(randint(0+1,alto-1),randint(0+1,ancho-1),randint(0,7))
+		termita = Termita(randint(0,alto),randint(0,ancho),randint(0,7))
 		termitas.append(termita)
 	return(termitas)
 
-
-# generar el mundo 
-mundo = crearMundo(alto,ancho,densidad)
-
-# crearTermitas
-termitas = crearTermitas(100,mundo)
-
-# simulacion 2 
 def update(data):
-	global mundo
-	newMundo = mundo.copy()
+	global grid
+	newGrid = grid.copy()
 
-	for i in xrange(len(termitas)):
-		termita = termitas[i]
-		newMundo[termita.posX,termita.posY]=2
-		tiroAstilla=termita.recogerAstilla(newMundo)
-			
-		if termita.cargando==True:
-			newMundo[termita.posX,termita.posY]=3
+	# actualizar la 'grid' global 
+	newGrid = crearMundo(alto,ancho,densidad)
 
-		if tiroAstilla==True:
-			newMundo[termita.posX,termita.posY]=1
-
-	mat.set_data(newMundo)
-	mundo = newMundo
+	mat.set_data(newGrid)
+	grid = newGrid
 	return [mat]
+
+termitas = crearTermitas(20,grid)
+
+termi = termitas[0]
+print(termi.posX)
+print(termi.posY)
+termi.moverTermita(grid)
+print(termi.posX)
+print(termi.posY)
+tiroAstilla=termi.recogerAstilla(grid)
+print(tiroAstilla)
 
 # set up animation
 fig, ax = plt.subplots()
-mat = ax.matshow(mundo)
+mat = ax.matshow(grid)
 ani = animation.FuncAnimation(fig, update, interval=50,
-                              save_count=50)
-
+                             save_count=50)
 plt.show()
-
-
-
-
-   
