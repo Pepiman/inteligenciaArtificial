@@ -51,39 +51,39 @@ class Termita:
 		logro_moverse=False
 
 		if paso_aleatorio == 0:
-			if (self.posX-1 >= 0) & (self.posY+1 <= np.shape(mundo)[1]):
+			if (self.posX-1 > 0) & (self.posY+1 < np.shape(mundo)[1]):
 				self.posX = self.posX-1
 				self.posY = self.posY+1
 				logro_moverse=True
 		elif paso_aleatorio == 1:
-			if self.posY+1 <= np.shape(mundo)[1]:
+			if self.posY+1 < np.shape(mundo)[1]:
 				self.posY = self.posY+1
 				logro_moverse=True
 		elif paso_aleatorio == 2:
-			if (self.posX+1 <= np.shape(mundo[0])) & (self.posY+1 <= np.shape(mundo)[1]):
+			if (self.posX+1 < np.shape(mundo[0])) & (self.posY+1 < np.shape(mundo)[1]):
 				self.posX = self.posX+1
 				self.posY = self.posY+1
 				logro_moverse = True
 		elif paso_aleatorio == 3:
-			if self.posX+1 <= np.shape(mundo)[0]:
+			if self.posX+1 < np.shape(mundo)[0]:
 				self.posX = self.posX+1
 				logro_moverse=True
 		elif paso_aleatorio == 4:
-			if (self.posX+1 <= np.shape(mundo)[0]) & (self.posY-1 >= 0):
+			if (self.posX+1 < np.shape(mundo)[0]) & (self.posY-1 > 0):
 				self.posX = self.posX+1
 				self.posY = self.posY-1
 				logro_moverse=True
 		elif paso_aleatorio == 5:
-			if self.posY-1 >= 0:
+			if self.posY-1 > 0:
 				self.posY = self.posY-1
 				logro_moverse=True
 		elif paso_aleatorio == 6:
-			if (self.posX-1 >= 0) & (self.posY-1 >= 0):
+			if (self.posX-1 > 0) & (self.posY-1 > 0):
 				self.posX = self.posX-1
 				self.posY = self.posY-1
 				logro_moverse=True
 		elif paso_aleatorio == 7:
-			if self.posX-1 >= 0:
+			if self.posX-1 > 0:
 				self.posX = self.posX-1
 				logro_moverse=True
 
@@ -125,7 +125,7 @@ def crearTermitas(numeroTermitas,mundo):
 	termitas = []
 
 	for i in xrange(numeroTermitas):
-		termita = Termita(randint(0+1,alto-1),randint(0+1,ancho-1),randint(0,7))
+		termita = Termita(randint(0+50,alto-50),randint(0+50,ancho-50),randint(0,7))
 		termitas.append(termita)
 	return(termitas)
 
@@ -134,16 +134,20 @@ def crearTermitas(numeroTermitas,mundo):
 mundo = crearMundo(alto,ancho,densidad)
 
 # crearTermitas
-termitas = crearTermitas(100,mundo)
+termitas = crearTermitas(10,mundo)
 
 # simulacion 2 
 def update(data):
 	global mundo
+	global termitas
 	newMundo = mundo.copy()
+	newTermitas = list(termitas)
 
 	for i in xrange(len(termitas)):
 		termita = termitas[i]
+		
 		newMundo[termita.posX,termita.posY]=2
+
 		tiroAstilla=termita.recogerAstilla(newMundo)
 			
 		if termita.cargando==True:
@@ -152,8 +156,13 @@ def update(data):
 		if tiroAstilla==True:
 			newMundo[termita.posX,termita.posY]=1
 
+		termita.moverTermita(newMundo)
+
+		newTermitas[i]=termita
+
 	mat.set_data(newMundo)
-	mundo = newMundo
+	#mundo = newMundo
+	termitas = newTermitas
 	return [mat]
 
 # set up animation
