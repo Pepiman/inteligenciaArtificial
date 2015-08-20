@@ -32,11 +32,13 @@ grid = crearMundo(alto,ancho,densidad)
 
 class Termita:
 	
-	def __init__(self,posX,posY,direccion):
+	def __init__(self,posX,posY,direccion,mundo):
 		self.posX = posX
 		self.posY = posY
 		self.direccion = direccion
 		self.cargando = False
+		self.limiteX = np.shape(mundo)[0]
+		self.limiteY = np.shape(mundo)[1]
 
 	def aleatorizarDireccion(self):
 		self.direccion = randint(0,7)
@@ -47,8 +49,6 @@ class Termita:
 		opciones = direcciones[np.array([self.direccion,self.direccion+1,self.direccion+2])]
 
 		paso_aleatorio = opciones[randint(0,2)]
-
-		logro_moverse=False
 
 		if paso_aleatorio == 0:
 			paso_x = -1
@@ -80,12 +80,12 @@ class Termita:
 		else:
 			self.aleatorizarDireccion()
 
+	def movimiento_valido(self,x, y):
+		return ((self.posX + x) > 0) and ((self.posY + y) > 0) and ((self.posX + x) < self.limiteX) and ((self.posY + y) < self.limiteY)
+
 	def mover_termita(self, x, y):
 		self.posX = self.posX + x
 		self.posY = self.posY + y
-
-	def movimiento_valido(self, x, y):
-		return (self.posX + x > 0) and (self.posY + y > 0) and (self.posX + x < ancho) and (self.posY + y < alto)
 
 	def recogerAstilla(self,mundo):
 		tiroAstilla = False
@@ -122,7 +122,7 @@ def crearTermitas(numeroTermitas,mundo):
 	termitas = []
 
 	for i in xrange(numeroTermitas):
-		termita = Termita(randint(0+50,alto-50),randint(0+50,ancho-50),randint(0,7))
+		termita = Termita(randint(0+50,alto-50),randint(0+50,ancho-50),randint(0,7),mundo)
 		termitas.append(termita)
 	return(termitas)
 
@@ -131,7 +131,7 @@ def crearTermitas(numeroTermitas,mundo):
 mundo = crearMundo(alto,ancho,densidad)
 
 # crearTermitas
-termitas = crearTermitas(10,mundo)
+termitas = crearTermitas(50,mundo)
 
 # simulacion 2 
 def update(data):
