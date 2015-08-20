@@ -11,11 +11,8 @@ alto = 100
 # Anchura (en celdas) de la cuadricula.
 ancho = 150
 
-# Tamanio de cada celda cuadrada (en pixeles).
-celda = 4
-
 # Cantidad de termitas dentro del modelo.
-termitas = 200
+termis = 200
 
 # Proporcion de astilla en el modelo (con probabilidad de 0 a 1).
 densidad = 0.7
@@ -93,6 +90,7 @@ class Termita:
 		if (mundo[self.posX,self.posY]==1) & (self.cargando == False):
 			self.cargando=True
 		elif (mundo[self.posX,self.posY]==1) & (self.cargando == True):
+			self.cargando=False
 			self.direccion = direcciones_contrarias[self.direccion]
 			self.moverTermita(mundo)
 			tiroAstilla = True
@@ -122,7 +120,7 @@ def crearTermitas(numeroTermitas,mundo):
 	termitas = []
 
 	for i in xrange(numeroTermitas):
-		termita = Termita(randint(0+50,alto-50),randint(0+50,ancho-50),randint(0,7),mundo)
+		termita = Termita(randint(0+2,alto-2),randint(0+2,ancho-2),randint(0,7),mundo)
 		termitas.append(termita)
 	return(termitas)
 
@@ -131,35 +129,44 @@ def crearTermitas(numeroTermitas,mundo):
 mundo = crearMundo(alto,ancho,densidad)
 
 # crearTermitas
-termitas = crearTermitas(50,mundo)
+termitas = crearTermitas(termis,mundo)
 
 # simulacion 2 
 def update(data):
 	global mundo
 	global termitas
 	newMundo = mundo.copy()
-	newTermitas = list(termitas)
+	#newTermitas = list(termitas)
 
 	for i in xrange(len(termitas)):
+		
 		termita = termitas[i]
 		
-		newMundo[termita.posX,termita.posY]=2
-
 		tiroAstilla=termita.recogerAstilla(newMundo)
-			
-		if termita.cargando==True:
-			newMundo[termita.posX,termita.posY]=3
 
-		if tiroAstilla==True:
-			newMundo[termita.posX,termita.posY]=1
+		if termita.cargando:
+			mundo[termita.posX,termita.posY]=0
+		elif tiroAstilla:
+			mundo[termita.posX,termita.posY]=1
 
 		termita.moverTermita(newMundo)
 
-		newTermitas[i]=termita
+		if termita.cargando==True:
+			newMundo[termita.posX,termita.posY]=3
+
+
+
+		print( tiroAstilla)
+
+		newMundo[termita.posX,termita.posY]=2
+
+
+
+		#newTermitas[i]=termita
 
 	mat.set_data(newMundo)
 	#mundo = newMundo
-	termitas = newTermitas
+	#termitas = newTermitas
 	return [mat]
 
 # set up animation
