@@ -90,10 +90,13 @@ class Termita:
 		if (mundo[self.posX,self.posY]==1) & (self.cargando == False):
 			self.cargando=True
 		elif (mundo[self.posX,self.posY]==1) & (self.cargando == True):
-			self.cargando=False
 			self.direccion = direcciones_contrarias[self.direccion]
 			self.moverTermita(mundo)
-			tiroAstilla = True
+			if (mundo[self.posX,self.posY]==0):
+				self.cargando=False
+				tiroAstilla = True
+			else:
+				self.recogerAstilla(mundo)
 		return(tiroAstilla)
 
 	
@@ -142,25 +145,22 @@ def update(data):
 		
 		termita = termitas[i]
 		
-		tiroAstilla=termita.recogerAstilla(newMundo)
+		tiroAstilla=termita.recogerAstilla(mundo)
 
 		if termita.cargando:
 			mundo[termita.posX,termita.posY]=0
 		elif tiroAstilla:
 			mundo[termita.posX,termita.posY]=1
 
-		termita.moverTermita(newMundo)
+		termita.moverTermita(mundo)
 
-		if termita.cargando==True:
-			newMundo[termita.posX,termita.posY]=3
+		#if termita.cargando==True:
+		#	newMundo[termita.posX,termita.posY]=3
+		if (mundo[termita.posX,termita.posY]==0):
+			newMundo[termita.posX,termita.posY]=2
 
-
-
-		print( tiroAstilla)
-
-		newMundo[termita.posX,termita.posY]=2
-
-
+		which1 = mundo == 1
+		print(np.sum(which1))
 
 		#newTermitas[i]=termita
 
